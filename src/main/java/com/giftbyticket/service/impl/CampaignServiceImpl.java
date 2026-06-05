@@ -16,6 +16,7 @@ public class CampaignServiceImpl implements CampaignService {
 
     private final CampaignRepository campaignRepository;
 
+
     @Override
     public CampaignResponse createCampaign(CampaignRequest request) {
 
@@ -39,15 +40,59 @@ public class CampaignServiceImpl implements CampaignService {
 
     @Override
     public List<CampaignResponse> getAllCampaigns() {
-        return new ArrayList<>();
+
+        List<Campaign> campaigns = campaignRepository.findAll();
+
+        return campaigns.stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 
     @Override
     public CampaignResponse getCampaignById(Long id) {
-        return null;
+
+        Campaign campaign = campaignRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Campaign not found with id: " + id));
+
+        return mapToResponse(campaign);
+    }
+
+    @Override
+    public CampaignResponse updateCampaign(Long id, CampaignRequest request) {
+
+        Campaign campaign = campaignRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Campaign not found with id: " + id));
+
+        campaign.setCampaignName(request.getCampaignName());
+        campaign.setDescription(request.getDescription());
+        campaign.setEntryFee(request.getEntryFee());
+        campaign.setStatus(request.getStatus());
+
+        Campaign updatedCampaign = campaignRepository.save(campaign);
+
+        return mapToResponse(updatedCampaign);
     }
 
     @Override
     public void deleteCampaign(Long id) {
+
+        Campaign campaign = campaignRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Campaign not found with id: " + id));
+
+        campaignRepository.delete(campaign);
+    }
+
+    private CampaignResponse mapToResponse(Campaign campaign) {
+
+        return CampaignResponse.builder()
+                .id(campaign.getId())
+                .campaignName(campaign.getCampaignName())
+                .description(campaign.getDescription())
+                .entryFee(campaign.getEntryFee())
+                .status(campaign.getStatus())
+                .build();
     }
 }

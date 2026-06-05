@@ -12,6 +12,6 @@ public interface CampaignService {
     List<CampaignResponse> getAllCampaigns();
 
     CampaignResponse getCampaignById(Long id);
-
+    CampaignResponse updateCampaign(Long id, CampaignRequest request);
     void deleteCampaign(Long id);
 }
