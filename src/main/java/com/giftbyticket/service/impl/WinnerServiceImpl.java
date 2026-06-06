@@ -50,10 +50,26 @@ public class WinnerServiceImpl implements WinnerService {
         return mapToResponse(winner);
     }
 
+
     @Override
     public void deleteWinner(Long id) {
 
         winnerRepository.deleteById(id);
+    }
+    @Override
+    public WinnerResponse updateWinner(Long id,
+                                       WinnerRequest request) {
+
+        Winner winner = winnerRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Winner not found"));
+
+        winner.setCampaignId(request.getCampaignId());
+        winner.setUserId(request.getUserId());
+
+        Winner updatedWinner = winnerRepository.save(winner);
+
+        return mapToResponse(updatedWinner);
     }
 
     private WinnerResponse mapToResponse(Winner winner) {
@@ -63,26 +79,6 @@ public class WinnerServiceImpl implements WinnerService {
                 .campaignId(winner.getCampaignId())
                 .userId(winner.getUserId())
                 .winnerDate(winner.getWinnerDate())
-                .build();
-    }
-
-    @Override
-    public WinnerResponse updateWinner(Long id, WinnerRequest request) {
-
-        Winner winner = winnerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Winner not found"));
-
-        winner.setCampaignId(request.getCampaignId());
-        winner.setUserId(request.getUserId());
-        winner.setWinnerDate(LocalDate.now());
-
-        Winner updatedWinner = winnerRepository.save(winner);
-
-        return WinnerResponse.builder()
-                .id(updatedWinner.getId())
-                .campaignId(updatedWinner.getCampaignId())
-                .userId(updatedWinner.getUserId())
-                .winnerDate(updatedWinner.getWinnerDate())
                 .build();
     }
 }

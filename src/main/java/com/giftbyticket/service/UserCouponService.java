@@ -11,5 +11,5 @@ public interface UserCouponService {
 
     List<UserCouponResponse> getCouponsByUser(Long userId);
 
-    UserCouponResponse markCouponUsed(Long userCouponId);
+    UserCouponResponse markCouponUsed(Long id);
 }
