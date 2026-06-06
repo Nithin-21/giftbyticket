@@ -1,14 +1,9 @@
 package com.giftbyticket.dto;
 
-import lombok.*;
+import lombok.Data;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Data
 public class WinnerRequest {
 

@@ -49,4 +49,10 @@ public class WinnerController {
 
         winnerService.deleteWinner(id);
     }
+
+    @RestController
+    @RequestMapping("/api/user-coupons")
+    @RequiredArgsConstructor
+    public class UserCouponController {
+        }
 }

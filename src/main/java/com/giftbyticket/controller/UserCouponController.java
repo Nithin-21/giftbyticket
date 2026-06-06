@@ -15,7 +15,7 @@ public class UserCouponController {
 
     private final UserCouponService userCouponService;
 
-    @PostMapping("/assign")
+    @PostMapping
     public UserCouponResponse assignCoupon(
             @RequestBody AssignCouponRequest request) {
 
