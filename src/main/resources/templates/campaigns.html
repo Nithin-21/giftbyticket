@@ -1,0 +1,72 @@
+<table border="1" id="campaignTable"></table>
+
+<script>
+
+    window.onload = loadCampaigns;
+
+    async function loadCampaigns() {
+
+        const response =
+            await fetch(
+                'http://localhost:8080/api/campaigns'
+            );
+
+        const campaigns =
+            await response.json();
+
+        let html =
+            "<tr><th>ID</th><th>Name</th><th>Action</th></tr>";
+
+        campaigns.forEach(c => {
+
+            html += `
+                <tr>
+                    <td>${c.id}</td>
+                    <td>${c.campaignName}</td>
+                    <td>
+                        <button onclick="participate(${c.id})">
+                            Participate
+                        </button>
+                    </td>
+                </tr>`;
+        });
+
+        document.getElementById(
+            "campaignTable"
+        ).innerHTML = html;
+    }
+
+    async function participate(campaignId)
+
+    {
+
+    const userId =
+        localStorage.getItem("userId");
+
+    const response =
+        await fetch(
+            "http://localhost:8080/api/entries",
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    userId:userId,
+                    campaignId:campaignId
+                })
+            }
+        );
+
+    const text = await response.text();
+
+    console.log(text);
+
+    if(response.ok){
+        alert("Successfully entered campaign");
+    } else {
+        alert(text);
+    }
+}
+
+</script>

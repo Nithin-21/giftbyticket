@@ -76,7 +76,7 @@ public class UserCouponServiceImpl implements UserCouponService {
                 .userId(userCoupon.getUser().getId())
                 .userName(userCoupon.getUser().getName())
                 .couponId(userCoupon.getCoupon().getId())
-                .couponCode(userCoupon.getCoupon().getCouponCode())
+                .couponCode(userCoupon.getGiveawayCode())   // it is from userCoupon only
                 .couponTitle(userCoupon.getCoupon().getCouponTitle())
                 .campaignId(userCoupon.getCampaign().getId())
                 .campaignName(userCoupon.getCampaign().getCampaignName())

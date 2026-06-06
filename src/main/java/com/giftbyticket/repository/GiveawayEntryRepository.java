@@ -5,4 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GiveawayEntryRepository
         extends JpaRepository<GiveawayEntry, Long> {
+    boolean existsByUserIdAndCampaignId(
+            Long userId,
+            Long campaignId);
 }

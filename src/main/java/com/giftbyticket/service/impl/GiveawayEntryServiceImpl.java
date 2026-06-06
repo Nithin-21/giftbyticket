@@ -3,7 +3,9 @@ package com.giftbyticket.service.impl;
 import com.giftbyticket.dto.GiveawayEntryRequest;
 import com.giftbyticket.dto.GiveawayEntryResponse;
 import com.giftbyticket.entity.GiveawayEntry;
+import com.giftbyticket.repository.CampaignRepository;
 import com.giftbyticket.repository.GiveawayEntryRepository;
+import com.giftbyticket.repository.UserRepository;
 import com.giftbyticket.service.GiveawayEntryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,16 +19,43 @@ public class GiveawayEntryServiceImpl
         implements GiveawayEntryService {
 
     private final GiveawayEntryRepository giveawayEntryRepository;
+    private final UserRepository userRepository;
 
+    private final CampaignRepository campaignRepository;
     @Override
     public GiveawayEntryResponse createEntry(
-            GiveawayEntryRequest request) {
+            GiveawayEntryRequest request)
+    {
 
         GiveawayEntry entry = GiveawayEntry.builder()
                 .userId(request.getUserId())
                 .campaignId(request.getCampaignId())
                 .entryDate(LocalDateTime.now())
                 .build();
+
+        if (!userRepository.existsById(
+                request.getUserId())) {
+
+            throw new RuntimeException(
+                    "User not found");
+        }
+
+        if (!campaignRepository.existsById(
+                request.getCampaignId())) {
+
+            throw new RuntimeException(
+                    "Campaign not found");
+        }
+
+        if (giveawayEntryRepository
+                .existsByUserIdAndCampaignId(
+                        request.getUserId(),
+                        request.getCampaignId())) {
+
+            throw new RuntimeException(
+                    "User already entered this campaign");
+        }
+
 
         GiveawayEntry savedEntry =
                 giveawayEntryRepository.save(entry);

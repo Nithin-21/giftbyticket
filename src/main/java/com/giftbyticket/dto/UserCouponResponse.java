@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class UserCouponResponse {
 
     private Long id;
-
+    private String giveawayCode;
     private Long userId;
     private String userName;
 

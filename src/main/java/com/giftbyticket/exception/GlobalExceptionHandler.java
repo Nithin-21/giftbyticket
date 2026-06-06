@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
 
         return Map.of(
                 "message",
-                "Something went wrong"
+                ex.getMessage()
         );
     }
 }

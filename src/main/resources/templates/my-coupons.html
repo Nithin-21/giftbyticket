@@ -1,0 +1,39 @@
+<h2>My Coupons</h2>
+
+<table border="1" id="couponTable"></table>
+
+<script>
+
+    window.onload = loadCoupons;
+
+    async function loadCoupons() {
+
+        const userId =
+            localStorage.getItem("userId");
+
+        const response =
+            await fetch(
+                `http://localhost:8080/api/user-coupons/user/${userId}`
+            );
+
+        const coupons =
+            await response.json();
+
+        let html =
+            "<tr><th>Coupon</th><th>Status</th></tr>";
+
+        coupons.forEach(c => {
+
+            html += `
+            <tr>
+                <td>${c.couponCode}</td>
+                <td>${c.used ? 'Used' : 'Available'}</td>
+            </tr>`;
+        });
+
+        document.getElementById(
+            "couponTable"
+        ).innerHTML = html;
+    }
+
+</script>

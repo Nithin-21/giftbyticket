@@ -1,0 +1,42 @@
+<h2>Register</h2>
+
+<input type="text" id="name" placeholder="Name"><br><br>
+
+<input type="email" id="email" placeholder="Email"><br><br>
+
+<input type="text" id="mobile" placeholder="Mobile"><br><br>
+
+<input type="password" id="password" placeholder="Password"><br><br>
+
+<button onclick="registerUser()">
+    Register
+</button>
+
+<script>
+
+    async function registerUser() {
+
+        const response = await fetch(
+            'http://localhost:8080/api/users/register',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    mobile: document.getElementById('mobile').value,
+                    password: document.getElementById('password').value,
+                    role: 'USER'
+                })
+            });
+
+        const data = await response.json();
+
+        alert("Registered Successfully");
+
+        window.location.href = "/";
+    }
+
+</script>
