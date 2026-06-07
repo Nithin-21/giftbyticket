@@ -15,7 +15,6 @@ public class UserCouponResponse {
     private String userName;
 
     private Long couponId;
-    private String couponCode;
     private String couponTitle;
 
     private Long campaignId;

@@ -18,4 +18,9 @@ public class GiveawayEntryResponse {
     private Long campaignId;
 
     private LocalDateTime entryDate;
+
+
+    private String campaignName;
+    private String couponTitle;
+    private String giveawayCode;
 }

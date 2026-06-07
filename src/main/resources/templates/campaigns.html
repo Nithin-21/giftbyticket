@@ -36,9 +36,7 @@
         ).innerHTML = html;
     }
 
-    async function participate(campaignId)
-
-    {
+    async function participate(campaignId) {
 
     const userId =
         localStorage.getItem("userId");
@@ -47,26 +45,42 @@
         await fetch(
             "http://localhost:8080/api/entries",
             {
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                body:JSON.stringify({
-                    userId:userId,
-                    campaignId:campaignId
+                body: JSON.stringify({
+                    userId: userId,
+                    campaignId: campaignId
                 })
             }
         );
 
-    const text = await response.text();
+    if (!response.ok) {
 
-    console.log(text);
+        const errorText =
+            await response.text();
 
-    if(response.ok){
-        alert("Successfully entered campaign");
-    } else {
-        alert(text);
+        alert(errorText);
+
+        return;
     }
+
+    const data =
+        await response.json();
+
+    console.log(data);
+
+    alert(
+        "Successfully registered for " +
+        data.campaignName +
+        "\n\nCoupon Assigned: " +
+        data.couponTitle +
+        "\nGiveaway Code: " +
+        data.giveawayCode
+    );
 }
+
+
 
 </script>

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +21,49 @@ public class UserCouponServiceImpl implements UserCouponService {
     private final UserRepository userRepository;
     private final CouponRepository couponRepository;
     private final CampaignRepository campaignRepository;
+
+    @Override
+    public UserCouponResponse autoAssignCoupon(
+            Long userId,
+            Long campaignId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        Campaign campaign = campaignRepository.findById(campaignId)
+                .orElseThrow(() ->
+                        new RuntimeException("Campaign not found"));
+
+        List<Coupon> coupons = couponRepository.findAll();
+
+        if (coupons.isEmpty()) {
+            throw new RuntimeException("No coupons available");
+        }
+
+        long totalAssignedCoupons =
+                userCouponRepository.count();
+
+        Coupon assignedCoupon =
+                coupons.get(
+                        (int) (totalAssignedCoupons % coupons.size())
+                );
+
+        UserCoupon userCoupon = UserCoupon.builder()
+                .user(user)
+                .campaign(campaign)
+                .coupon(assignedCoupon)
+                .giveawayCode(generateGiveawayCode())
+                .assignedDate(LocalDateTime.now())
+                .used(false)
+                .build();
+
+        UserCoupon savedUserCoupon =
+                userCouponRepository.save(userCoupon);
+
+        return mapToResponse(savedUserCoupon);
+    }
+
 
     @Override
     public UserCouponResponse assignCoupon(AssignCouponRequest request) {
@@ -76,7 +120,7 @@ public class UserCouponServiceImpl implements UserCouponService {
                 .userId(userCoupon.getUser().getId())
                 .userName(userCoupon.getUser().getName())
                 .couponId(userCoupon.getCoupon().getId())
-                .couponCode(userCoupon.getGiveawayCode())   // it is from userCoupon only
+                .giveawayCode(userCoupon.getGiveawayCode())   // it is from userCoupon only
                 .couponTitle(userCoupon.getCoupon().getCouponTitle())
                 .campaignId(userCoupon.getCampaign().getId())
                 .campaignName(userCoupon.getCampaign().getCampaignName())
@@ -84,5 +128,15 @@ public class UserCouponServiceImpl implements UserCouponService {
                 .used(userCoupon.getUsed())
                 .usedDate(userCoupon.getUsedDate())
                 .build();
+    }
+
+    //helper method for coupon code generation
+
+    private String generateGiveawayCode() {
+
+        Random random = new Random();
+
+        return "CP" +
+                (1000 + random.nextInt(9000));
     }
 }

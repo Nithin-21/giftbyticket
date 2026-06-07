@@ -7,6 +7,11 @@ import java.util.List;
 
 public interface UserCouponService {
 
+
+
+    UserCouponResponse autoAssignCoupon( Long userId,   Long campaignId);
+
+
     UserCouponResponse assignCoupon(AssignCouponRequest request);
 
     List<UserCouponResponse> getCouponsByUser(Long userId);

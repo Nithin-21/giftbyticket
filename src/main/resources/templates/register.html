@@ -32,11 +32,17 @@
                 })
             });
 
-        const data = await response.json();
+        if (!response.ok) {
 
-        alert("Registered Successfully");
+            const errorText = await response.text();
+
+            alert(errorText);
+
+            return;
+        }
+
+        alert("Registration Successful. Please Login.");
 
         window.location.href = "/";
     }
-
 </script>
