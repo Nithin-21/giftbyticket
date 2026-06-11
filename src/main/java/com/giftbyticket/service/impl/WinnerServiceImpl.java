@@ -64,8 +64,8 @@ public class WinnerServiceImpl implements WinnerService {
                 .orElseThrow(() ->
                         new RuntimeException("Winner not found"));
 
-        winner.setCampaignId(request.getCampaignId());
-        winner.setUserId(request.getUserId());
+        winner.setWinnerDate(request.getWinnerDate());
+
 
         Winner updatedWinner = winnerRepository.save(winner);
 

@@ -20,7 +20,7 @@ public class CouponServiceImpl implements CouponService {
     public CouponResponse createCoupon(CouponRequest request) {
 
         Coupon coupon = Coupon.builder()
-                // .couponCode(request.getCouponCode())  //not rquired here
+                .couponCode(request.getCouponCode())  //not rquired here
                 .couponTitle(request.getCouponTitle())
                 .discountAmount(request.getDiscountAmount())
                 .expiryDate(request.getExpiryDate())
@@ -56,7 +56,7 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon = couponRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Coupon not found"));
 
-       // coupon.setCouponCode(request.getCouponCode());
+        coupon.setCouponCode(request.getCouponCode());
         coupon.setCouponTitle(request.getCouponTitle());
         coupon.setDiscountAmount(request.getDiscountAmount());
         coupon.setExpiryDate(request.getExpiryDate());
@@ -76,7 +76,7 @@ public class CouponServiceImpl implements CouponService {
 
         return CouponResponse.builder()
                 .id(coupon.getId())
-            //    .couponCode(coupon.getCouponCode())
+                .couponCode(coupon.getCouponCode())
                 .couponTitle(coupon.getCouponTitle())
                 .discountAmount(coupon.getDiscountAmount())
                 .expiryDate(coupon.getExpiryDate())
