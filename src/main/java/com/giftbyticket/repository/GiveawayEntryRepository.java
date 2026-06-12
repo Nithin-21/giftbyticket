@@ -8,4 +8,5 @@ public interface GiveawayEntryRepository
     boolean existsByUserIdAndCampaignId(
             Long userId,
             Long campaignId);
+            Long countByUserId(Long userId);
 }
