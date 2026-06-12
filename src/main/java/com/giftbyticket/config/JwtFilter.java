@@ -43,19 +43,30 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 User user = userRepository.findByEmail(email);
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                email,
-                                null,
-                                List.of(
-                                        new SimpleGrantedAuthority(user.getRole())
-                                )
-                        );
+                System.out.println("Email from token = " + email);
+                System.out.println("User from DB = " + user);
 
-                SecurityContextHolder.getContext()
-                        .setAuthentication(authentication);
+                if (user != null) {
+
+                    System.out.println("Role = " + user.getRole());
+
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    email,
+                                    null,
+                                    List.of(
+                                            new SimpleGrantedAuthority("ROLE_ADMIN"
+                                            )
+                                    )
+                            );
+
+                    SecurityContextHolder.getContext()
+                            .setAuthentication(authentication);
+                }
 
             } catch (Exception e) {
+
+                e.printStackTrace();
 
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;

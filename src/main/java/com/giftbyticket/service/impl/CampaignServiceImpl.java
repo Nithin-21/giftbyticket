@@ -3,19 +3,19 @@ package com.giftbyticket.service.impl;
 import com.giftbyticket.dto.CampaignRequest;
 import com.giftbyticket.dto.CampaignResponse;
 import com.giftbyticket.entity.Campaign;
+import com.giftbyticket.repository.CampaignRepository;
 import com.giftbyticket.service.CampaignService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.giftbyticket.repository.CampaignRepository;
 
-import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CampaignServiceImpl implements CampaignService {
 
     private final CampaignRepository campaignRepository;
-
 
     @Override
     public CampaignResponse createCampaign(CampaignRequest request) {
@@ -27,33 +27,25 @@ public class CampaignServiceImpl implements CampaignService {
                 .status(request.getStatus())
                 .build();
 
-        Campaign savedCampaign = campaignRepository.save(campaign);
+        campaign = campaignRepository.save(campaign);
 
-        return CampaignResponse.builder()
-                .id(savedCampaign.getId())
-                .campaignName(savedCampaign.getCampaignName())
-                .description(savedCampaign.getDescription())
-                .entryFee(savedCampaign.getEntryFee())
-                .status(savedCampaign.getStatus())
-                .build();
+        return mapToResponse(campaign);
     }
 
     @Override
     public List<CampaignResponse> getAllCampaigns() {
 
-        List<Campaign> campaigns = campaignRepository.findAll();
-
-        return campaigns.stream()
+        return campaignRepository.findAll()
+                .stream()
                 .map(this::mapToResponse)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
     public CampaignResponse getCampaignById(Long id) {
 
         Campaign campaign = campaignRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Campaign not found with id: " + id));
+                .orElseThrow();
 
         return mapToResponse(campaign);
     }
@@ -62,27 +54,21 @@ public class CampaignServiceImpl implements CampaignService {
     public CampaignResponse updateCampaign(Long id, CampaignRequest request) {
 
         Campaign campaign = campaignRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Campaign not found with id: " + id));
+                .orElseThrow();
 
         campaign.setCampaignName(request.getCampaignName());
         campaign.setDescription(request.getDescription());
         campaign.setEntryFee(request.getEntryFee());
         campaign.setStatus(request.getStatus());
 
-        Campaign updatedCampaign = campaignRepository.save(campaign);
+        campaign = campaignRepository.save(campaign);
 
-        return mapToResponse(updatedCampaign);
+        return mapToResponse(campaign);
     }
 
     @Override
     public void deleteCampaign(Long id) {
-
-        Campaign campaign = campaignRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Campaign not found with id: " + id));
-
-        campaignRepository.delete(campaign);
+        campaignRepository.deleteById(id);
     }
 
     private CampaignResponse mapToResponse(Campaign campaign) {

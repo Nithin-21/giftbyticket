@@ -1,14 +1,17 @@
 package com.giftbyticket.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.Data;
 
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name="campaigns")
 public class Campaign {
 
     @Id
@@ -17,8 +20,9 @@ public class Campaign {
 
     private String campaignName;
 
-    @Column(length = 1000)
     private String description;
+
+    private Integer totalCoupons;
 
     private Double entryFee;
 

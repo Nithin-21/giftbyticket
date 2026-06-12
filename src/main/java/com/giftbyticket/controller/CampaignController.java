@@ -6,24 +6,26 @@ import com.giftbyticket.service.CampaignService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/campaigns")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class CampaignController {
 
     private final CampaignService campaignService;
 
-    // when we donot write any end point here it with take from requestmapping
     @PostMapping
     public CampaignResponse createCampaign(
             @RequestBody CampaignRequest request) {
 
         return campaignService.createCampaign(request);
     }
+
     @GetMapping
     public List<CampaignResponse> getAllCampaigns() {
+
         return campaignService.getAllCampaigns();
     }
 
@@ -43,11 +45,9 @@ public class CampaignController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCampaign(
+    public void deleteCampaign(
             @PathVariable Long id) {
 
         campaignService.deleteCampaign(id);
-        return "Campaign deleted successfully";
     }
-
 }
