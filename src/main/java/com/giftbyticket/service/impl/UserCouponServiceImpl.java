@@ -117,16 +117,23 @@ public class UserCouponServiceImpl implements UserCouponService {
 
         return UserCouponResponse.builder()
                 .id(userCoupon.getId())
+                .giveawayCode(userCoupon.getGiveawayCode())
+
                 .userId(userCoupon.getUser().getId())
                 .userName(userCoupon.getUser().getName())
+
                 .couponId(userCoupon.getCoupon().getId())
-                .giveawayCode(userCoupon.getGiveawayCode())   // it is from userCoupon only
+                .couponCode(userCoupon.getCoupon().getCouponCode())
                 .couponTitle(userCoupon.getCoupon().getCouponTitle())
+                .discountAmount(userCoupon.getCoupon().getDiscountAmount())
+                .expiryDate(userCoupon.getCoupon().getExpiryDate())
                 .campaignId(userCoupon.getCampaign().getId())
                 .campaignName(userCoupon.getCampaign().getCampaignName())
+
                 .assignedDate(userCoupon.getAssignedDate())
                 .used(userCoupon.getUsed())
                 .usedDate(userCoupon.getUsedDate())
+
                 .build();
     }
 

@@ -11,18 +11,20 @@ public class UserCouponResponse {
 
     private Long id;
     private String giveawayCode;
+
     private Long userId;
     private String userName;
 
     private Long couponId;
+    private String couponCode;
     private String couponTitle;
+    private Double discountAmount;
+    private String expiryDate;
 
     private Long campaignId;
     private String campaignName;
 
     private LocalDateTime assignedDate;
-
     private Boolean used;
-
     private LocalDateTime usedDate;
 }
